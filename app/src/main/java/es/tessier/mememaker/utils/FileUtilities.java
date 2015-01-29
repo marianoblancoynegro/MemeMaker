@@ -23,7 +23,9 @@ public class FileUtilities {
 
     public static File[] getImages(Context context)
     {
-        File fileDirectory = context.getFilesDir();
+        //File fileDirectory = context.getFilesDir(); //se implementa por la linea inferior
+        File fileDirectory = getFileDirectory(context);
+
         final File[] filteredFiles = fileDirectory.listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
@@ -43,9 +45,52 @@ public class FileUtilities {
 
     static String TAG = FileUtilities.class.getName();
 
+    public static boolean isExternalStorageAvailable()
+    {
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state))
+        {
+            return true;
+        }
+        return false;
+    }
+    public static File getFileDirectory(Context context)
+    {
+        String Storage_type="StorageType.INTERNAL";  //guardara las variables StorageType.INTERNAL o StorageType.PUBLIC_EXTERNAL o StorageType.PRIVATE_EXTERNAL
+        Storage_type="StorageType.PUBLIC_EXTERNAL";
+        if(Storage_type.equalsIgnoreCase("StorageType.INTERNAL"))
+        {
+            return context.getFilesDir();
+        }
+        else
+        {
+            if(isExternalStorageAvailable())
+            {
+                if(Storage_type.equalsIgnoreCase("StorageType.PRIVATE_EXTERNAL"))
+                {
+                    //las imagenes no podran ser accesibles desde otras aplicaciones:
+                    return context.getExternalFilesDir(null);
+                }
+                else
+                {
+                    String album_name="mememaker";
+                    File fotospublicas = new File (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),album_name);
+                    if(!fotospublicas.mkdirs())
+                    {
+                        Log.e(TAG,"Directorio no creado");
+                    }
+                    return fotospublicas;
+                }
+            }
+        }
+        return null;
+    }
+
     public static void copyFile(Context context, String assetName)
     {
-        File fileDirectory = context.getFilesDir();
+        // File fileDirectory = context.getFilesDir();    //esto lo modificamos por la linea inferior e implementamos el metodo.
+        File fileDirectory = getFileDirectory(context);
+
         File fileToWrite = new File (fileDirectory, assetName);
         AssetManager assetManager = context.getAssets();
         InputStream in=null;
@@ -107,7 +152,9 @@ public class FileUtilities {
 
 
     public static void saveImage(Context context, Bitmap bitmap, String name) {
-        File fileDirectory = context.getFilesDir();
+        //File fileDirectory = context.getFilesDir(); //se implementa por la linea inferior
+        File fileDirectory = getFileDirectory(context);
+
         File fileToWrite = new File(fileDirectory, name);
 
         try {
