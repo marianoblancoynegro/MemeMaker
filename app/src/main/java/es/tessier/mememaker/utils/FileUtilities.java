@@ -20,6 +20,8 @@ import java.lang.reflect.Array;
  * Created by Evan Anger on 7/28/14.
  */
 public class FileUtilities {
+    final static String STORAGE_TYPE=StorageType.PUBLIC_EXTERNAL;
+    //Esta funciona correctamente*/ String Storage_type="StorageType.INTERNAL";  //guardara las variables StorageType.INTERNAL o StorageType.PUBLIC_EXTERNAL o StorageType.PRIVATE_EXTERNAL
 
     public static File[] getImages(Context context)
     {
@@ -56,9 +58,8 @@ public class FileUtilities {
     }
     public static File getFileDirectory(Context context)
     {
-        String Storage_type="StorageType.INTERNAL";  //guardara las variables StorageType.INTERNAL o StorageType.PUBLIC_EXTERNAL o StorageType.PRIVATE_EXTERNAL
-        Storage_type="StorageType.PUBLIC_EXTERNAL";
-        if(Storage_type.equalsIgnoreCase("StorageType.INTERNAL"))
+
+        if(STORAGE_TYPE.equalsIgnoreCase(StorageType.INTERNAL))
         {
             return context.getFilesDir();
         }
@@ -66,7 +67,7 @@ public class FileUtilities {
         {
             if(isExternalStorageAvailable())
             {
-                if(Storage_type.equalsIgnoreCase("StorageType.PRIVATE_EXTERNAL"))
+                if(STORAGE_TYPE.equalsIgnoreCase(StorageType.PRIVATE_EXTERNAL))
                 {
                     //las imagenes no podran ser accesibles desde otras aplicaciones:
                     return context.getExternalFilesDir(null);
@@ -74,10 +75,29 @@ public class FileUtilities {
                 else
                 {
                     String album_name="mememaker";
-                    File fotospublicas = new File (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),album_name);
+                    //File fotospublicas = new File (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),album_name);
+                    File fotospublicas = new File (Environment.getExternalStorageDirectory(),album_name);
+
                     if(!fotospublicas.mkdirs())
                     {
                         Log.e(TAG,"Directorio no creado");
+                        /*Para realizar una prueba:*/
+                        String content = "hello world";
+                        File file;
+                        FileOutputStream outputStream;
+                        try {
+
+                            //file = new File(Environment.getExternalStorageDirectory(), "MyCache");
+                            /*Prueba2*/
+                            file = new File(context.getFilesDir(), "MyCache2");
+
+                            /*Fin prueba 2*/
+                            outputStream = new FileOutputStream(file);
+                            outputStream.write(content.getBytes());
+                            outputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     return fotospublicas;
                 }
