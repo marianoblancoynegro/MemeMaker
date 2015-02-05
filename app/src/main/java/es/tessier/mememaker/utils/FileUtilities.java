@@ -16,11 +16,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 
+import es.tessier.mememaker.MemeMakerApplicationSettings;
+
 /**
  * Created by Evan Anger on 7/28/14.
  */
 public class FileUtilities {
-    final static String STORAGE_TYPE=StorageType.PUBLIC_EXTERNAL;
+    /*final static String STORAGE_TYPE=StorageType.PUBLIC_EXTERNAL;*/
     //Esta funciona correctamente*/ String Storage_type="StorageType.INTERNAL";  //guardara las variables StorageType.INTERNAL o StorageType.PUBLIC_EXTERNAL o StorageType.PRIVATE_EXTERNAL
 
     public static File[] getImages(Context context)
@@ -58,8 +60,9 @@ public class FileUtilities {
     }
     public static File getFileDirectory(Context context)
     {
+        MemeMakerApplicationSettings m = new MemeMakerApplicationSettings(context);
 
-        if(STORAGE_TYPE.equalsIgnoreCase(StorageType.INTERNAL))
+        if(m.getStoredPreferences().equalsIgnoreCase(StorageType.INTERNAL))
         {
             return context.getFilesDir();
         }
@@ -67,7 +70,7 @@ public class FileUtilities {
         {
             if(isExternalStorageAvailable())
             {
-                if(STORAGE_TYPE.equalsIgnoreCase(StorageType.PRIVATE_EXTERNAL))
+                if(m.getStoredPreferences().equalsIgnoreCase(StorageType.PRIVATE_EXTERNAL))
                 {
                     //las imagenes no podran ser accesibles desde otras aplicaciones:
                     return context.getExternalFilesDir(null);

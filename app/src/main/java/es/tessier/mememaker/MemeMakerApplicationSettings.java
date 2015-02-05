@@ -29,7 +29,8 @@ public class MemeMakerApplicationSettings {
 
     public void setSharedPreferences(String tipo){
 
-        siguiente punto 3 .5!!!!
-        SharedPreferences.Editor editableAppPrefs = mSharedPreferences.edit();
+        mSharedPreferences.edit()
+                          .putString("Storage", tipo)
+                          .apply();
     }
 }
