@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import es.tessier.mememaker.adapters.MemeItemListAdapter;
+import es.tessier.mememaker.database.MemeDatasource;
 import es.tessier.mememaker.models.Meme;
 import es.tessier.mememaker.models.MemeAnnotation;
 import es.tessier.mememaker.ui.activities.CreateMemeActivity;
@@ -35,11 +36,17 @@ public class MemeItemFragment extends ListFragment {
     private Menu mMenu;
     private int mSelectedItem;
     private MemeItemListAdapter mMemeItemListAdapter;
+    private MemeDatasource mMemeDataSource;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMemeDataSource = new MemeDatasource(this.getActivity());
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -143,4 +150,5 @@ public class MemeItemFragment extends ListFragment {
 
         return workingBitmap;
     }
+
 }
