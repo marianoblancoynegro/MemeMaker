@@ -179,6 +179,6 @@ public class CreateMemeActivity extends Activity {
         m.create(mCurrentMeme);
 
 
-        Obteniendo datos 1
+
     }
 }
